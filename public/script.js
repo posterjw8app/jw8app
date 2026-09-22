@@ -19,6 +19,8 @@ const authSwitch = document.querySelector("#auth-switch");
 const logoutButton = document.querySelector("#logout-button");
 const accountLabel = document.querySelector("#account-label");
 const accountAvatar = document.querySelector("#account-avatar");
+const boardArea = document.querySelector(".board-area");
+const boardFrame = document.querySelector(".board-frame");
 
 let board = [];
 let currentPlayer = 1;
@@ -30,6 +32,20 @@ let scores = { black: 0, white: 0 };
 let toastTimer;
 let authMode = "login";
 let currentUser = localStorage.getItem("gomoku-current-user") || "";
+
+function updateBoardTilt(event) {
+  if (window.matchMedia("(max-width: 500px), (prefers-reduced-motion: reduce)").matches) return;
+  const bounds = boardArea.getBoundingClientRect();
+  const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+  const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+  boardFrame.style.setProperty("--tilt-x", `${(-y * 5).toFixed(2)}deg`);
+  boardFrame.style.setProperty("--tilt-y", `${(x * 5).toFixed(2)}deg`);
+}
+
+function resetBoardTilt() {
+  boardFrame.style.setProperty("--tilt-x", "0deg");
+  boardFrame.style.setProperty("--tilt-y", "0deg");
+}
 
 function newGame() {
   board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
@@ -302,6 +318,8 @@ function playSound(frequency) {
 }
 
 document.querySelector("#new-game").addEventListener("click", newGame);
+boardArea.addEventListener("pointermove", updateBoardTilt);
+boardArea.addEventListener("pointerleave", resetBoardTilt);
 undoButton.addEventListener("click", undo);
 document.querySelector("#sound-toggle").addEventListener("click", (event) => {
   soundOn = !soundOn;
