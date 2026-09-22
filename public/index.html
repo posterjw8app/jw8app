@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="一款简洁的在线五子棋游戏" />
+    <title>弈 · 五子棋</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="弈五子棋首页">
+          <span class="brand-mark">弈</span>
+          <span>
+            <strong>五子棋</strong>
+            <small>GOMOKU</small>
+          </span>
+        </a>
+        <div class="topbar-actions">
+          <button class="icon-button" id="sound-toggle" type="button" aria-label="关闭音效" title="音效">
+            <span aria-hidden="true">◖</span>
+          </button>
+          <button class="text-button" id="rules-button" type="button">玩法说明</button>
+          <button class="account-button" id="account-button" type="button">
+            <span class="account-avatar" id="account-avatar">?</span>
+            <span id="account-label">登录 / 注册</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="game-layout">
+        <aside class="sidebar">
+          <div class="eyebrow">棋局状态</div>
+          <h1>专注当下，<br /><em>落子无悔</em></h1>
+          <div class="turn-card" id="turn-card">
+            <span class="turn-dot black" id="turn-dot"></span>
+            <div>
+              <span class="turn-label">当前回合</span>
+              <strong id="turn-label">黑方落子</strong>
+            </div>
+            <span class="turn-count" id="turn-count">0 / 225</span>
+          </div>
+
+          <div class="scoreboard" aria-label="比分">
+            <div class="score-item">
+              <span class="score-piece black"></span>
+              <span>黑方</span>
+              <strong id="black-score">0</strong>
+            </div>
+            <div class="score-divider">—</div>
+            <div class="score-item">
+              <span class="score-piece white"></span>
+              <span>白方</span>
+              <strong id="white-score">0</strong>
+            </div>
+          </div>
+
+          <div class="mode-switch" role="group" aria-label="游戏模式">
+            <button class="mode-button active" data-mode="local" type="button">双人对弈</button>
+            <button class="mode-button" data-mode="computer" type="button">人机对弈</button>
+          </div>
+          <div class="game-actions">
+            <button class="primary-button" id="new-game" type="button"><span>＋</span> 新开一局</button>
+            <button class="secondary-button" id="undo" type="button" disabled><span>↶</span> 悔棋</button>
+          </div>
+          <p class="hint">横、竖、斜线连续五子即可获胜</p>
+        </aside>
+
+        <section class="board-area" aria-label="五子棋棋盘">
+          <div class="board-frame">
+            <div class="board" id="board" role="grid" aria-label="15乘15五子棋棋盘"></div>
+          </div>
+          <div class="board-footer">
+            <span><i class="online-dot"></i> 本地游戏</span>
+            <span id="last-move">等待黑方落子</span>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="rules-dialog">
+      <button class="dialog-close" id="close-rules" type="button" aria-label="关闭">×</button>
+      <div class="eyebrow">游戏规则</div>
+      <h2>五子棋怎么玩？</h2>
+      <ol>
+        <li>黑方先行，双方轮流在棋盘交叉点落子。</li>
+        <li>率先在横、竖或斜线上连成五子的一方获胜。</li>
+        <li>棋盘填满仍没有五连，则本局和棋。</li>
+      </ol>
+      <p class="dialog-note">人机模式中，你执黑方，电脑执白方。</p>
+    </dialog>
+    <dialog id="auth-dialog">
+      <button class="dialog-close" id="close-auth" type="button" aria-label="关闭">×</button>
+      <div class="auth-header">
+        <div class="brand-mark">弈</div>
+        <div>
+          <div class="eyebrow" id="auth-eyebrow">欢迎回来</div>
+          <h2 id="auth-title">登录账号</h2>
+        </div>
+      </div>
+      <form id="auth-form">
+        <label class="field-label" for="auth-username">用户名</label>
+        <input id="auth-username" name="username" type="text" autocomplete="username" minlength="3" maxlength="20" placeholder="请输入 3-20 位用户名" required />
+        <label class="field-label" for="auth-password">密码</label>
+        <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="6" placeholder="请输入至少 6 位密码" required />
+        <label class="field-label hidden" id="confirm-password-label" for="auth-confirm">确认密码</label>
+        <input class="hidden" id="auth-confirm" name="confirm" type="password" autocomplete="new-password" minlength="6" placeholder="请再次输入密码" />
+        <p class="auth-error" id="auth-error" role="alert"></p>
+        <button class="primary-button auth-submit" id="auth-submit" type="submit">登录</button>
+      </form>
+      <button class="auth-switch" id="auth-switch" type="button">还没有账号？立即注册</button>
+      <button class="logout-button hidden" id="logout-button" type="button">退出当前账号</button>
+      <p class="dialog-note">账号信息仅保存在当前浏览器中，适合本地体验。</p>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
