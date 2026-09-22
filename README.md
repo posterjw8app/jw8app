@@ -35,12 +35,13 @@ npm run deploy
 - **Deploy command**：留空（Pages 会自动发布构建产物）
 
 Cloudflare 会先执行 `npm run build`，再发布生成的 `dist/` 目录。也可以直接执行
-`npm run deploy` 完成构建和部署。
+`npm run deploy` 在本地完成构建和部署。
 
 ### 重要：删除错误的 Deploy command
 
-如果日志中出现 `Executing user deploy command: npx wrangler deploy`，说明
-Cloudflare Pages 项目的 **Deploy command** 被填错了。请在项目设置中删除该命令，
+如果日志中出现 `Executing user deploy command: npm run deploy`，说明
+Cloudflare Pages 项目的 **Deploy command** 被填写了。Git 集成部署时不要填写该命令，
+否则会在 Cloudflare 的构建环境里再次调用 Wrangler API。请在项目设置中删除该命令，
 保存后重新部署：
 
 1. 进入 **Workers & Pages → 你的 Pages 项目 → Settings → Builds & deployments**。
@@ -50,5 +51,15 @@ Cloudflare Pages 项目的 **Deploy command** 被填错了。请在项目设置�
 
 `npx wrangler deploy` 是 **Workers** 命令，会寻找 Worker 入口文件或 Workers
 Assets，因此会报 `Missing entry-point to Worker script or to assets directory`。
-如果必须使用自定义部署命令，请填写 `npm run deploy`，它实际执行的是 Pages
-专用命令 `npx wrangler pages deploy dist --project-name jw8app`。
+
+### Wrangler 命令行部署（可选）
+
+如果不使用 Pages Git 集成，而是从本地或 CI 执行 `npm run deploy`，则
+`CLOUDFLARE_API_TOKEN` 必须拥有目标账号的 **Cloudflare Pages: Edit** 权限，
+并且 Token 的账号范围必须包含当前账号。日志中的
+`Authentication error [code: 10000]` 表示 Token 权限或账号范围不正确，不是项目构建错误。
+创建或更新 Token 后，在本地执行：
+
+```bash
+npm run deploy
+```
