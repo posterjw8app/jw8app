@@ -37,7 +37,18 @@ npm run deploy
 Cloudflare 会先执行 `npm run build`，再发布生成的 `dist/` 目录。也可以直接执行
 `npm run deploy` 完成构建和部署。
 
-> 不要填写 `npx wrangler deploy`。这是 **Workers** 的部署命令，会寻找 Worker
-> 入口文件，因此会出现 `Could not detect a directory containing static files`。
-> 如果必须使用自定义部署命令，请填写 `npm run deploy`，它实际执行的是
-> `npx wrangler pages deploy dist --project-name jw8app`。
+### 重要：删除错误的 Deploy command
+
+如果日志中出现 `Executing user deploy command: npx wrangler deploy`，说明
+Cloudflare Pages 项目的 **Deploy command** 被填错了。请在项目设置中删除该命令，
+保存后重新部署：
+
+1. 进入 **Workers & Pages → 你的 Pages 项目 → Settings → Builds & deployments**。
+2. 将 **Deploy command** 清空（不要填写 `npx wrangler deploy`）。
+3. 保留 **Build command** 为 `npm run build`，**Build output directory** 为 `dist`。
+4. 重新触发部署。
+
+`npx wrangler deploy` 是 **Workers** 命令，会寻找 Worker 入口文件或 Workers
+Assets，因此会报 `Missing entry-point to Worker script or to assets directory`。
+如果必须使用自定义部署命令，请填写 `npm run deploy`，它实际执行的是 Pages
+专用命令 `npx wrangler pages deploy dist --project-name jw8app`。
